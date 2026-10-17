@@ -5,23 +5,27 @@ pipeline {
         }
     }
 
-    environment {
-        PATH = "/opt/homebrew/bin:/usr/local/bin:/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
-    }
-
     stages {
-        stage('Check Docker') {
+        stage('Check Java and Maven') {
             steps {
-                sh 'which docker'
-                sh 'docker --version'
-                sh 'docker info'
+                sh 'java -version'
+                sh 'mvn --version'
             }
         }
 
-        stage('Build') {
+        stage('Build Spring Boot App') {
             steps {
                 sh 'mvn clean package'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Spring Boot build successful!'
+        }
+        failure {
+            echo 'Build failed. Check the console output.'
         }
     }
 }
