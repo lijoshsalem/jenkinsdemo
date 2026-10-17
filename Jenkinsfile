@@ -1,7 +1,9 @@
+
 pipeline {
     agent {
         docker {
             image 'maven:3.9.9-eclipse-temurin-21-alpine'
+            args '-e HOME=/tmp -e MAVEN_CONFIG=/tmp/.m2'
         }
     }
 
@@ -15,7 +17,7 @@ pipeline {
 
         stage('Build Spring Boot App') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn -Dmaven.repo.local=/tmp/.m2/repository clean package'
             }
         }
     }
